@@ -12,10 +12,11 @@ ENTRYOFFSET = 0x400
 ASM = nasm
 CC = gcc
 LD = ld
-ASMBFLAGS = -I boot/include/
+ASMBFLAGS = -I include/
 ASMKFLAGS = -I include/ -f elf
 CFLAGS    = -I ./include -c -fno-builtin -m32
 LDFLAGS	  = -s -Ttext $(ENTRYPOINT) -m elf_i386
+#按照指定平台架构和位数对汇编文件和源代码进行编译
 
 TINIXBOOT   = boot/boot.bin boot/loader.bin
 TINIXKERNEL = kernel.bin
@@ -41,9 +42,9 @@ buildimg:
 	cp -f kernel.bin /mnt
 	umount /mnt
 
-boot/boot.bin : boot/boot.asm boot/include/load.inc boot/include/fat12hdr.inc
+boot/boot.bin : boot/boot.asm include/load.inc include/fat12hdr.inc
 	$(ASM) $(ASMBFLAGS) -o $@ $<
-boot/loader.bin : boot/loader.asm boot/include/load.inc boot/include/fat12hdr.inc boot/include/pm.inc
+boot/loader.bin : boot/loader.asm include/load.inc include/fat12hdr.inc include/pm.inc
 	$(ASM) $(ASMBFLAGS) -o $@ $<
 
 $(TINIXKERNEL) : $(OBJS)
